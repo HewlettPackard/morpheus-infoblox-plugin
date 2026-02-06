@@ -34,7 +34,7 @@ class MorpheusUtils {
 	}
 
 	static buildSyncLists(existingItems, masterItems, matchExistingToMasterFunc, secondaryMatchExistingToMasterFunc=null) {
-		log.info "buildSyncLists: ${existingItems}, ${masterItems}"
+		log.debug "buildSyncLists: ${existingItems}, ${masterItems}"
 		def rtn = [addList:[], updateList: [], removeList: []]
 		try {
 			existingItems?.each { existing ->

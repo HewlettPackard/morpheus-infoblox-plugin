@@ -402,7 +402,7 @@ class InfobloxProvider implements IPAMProvider, DNSProvider {
 					cacheIpAddressRecords(infobloxClient,poolServer, opts)
 					cacheZoneRecords(infobloxClient,poolServer, opts)
 				}
-				log.info("Sync Completed in ${new Date().time - now.time}ms")
+				log.debug("Sync Completed in ${new Date().time - now.time}ms")
 				morpheus.network.updateNetworkPoolServerStatus(poolServer, AccountIntegration.Status.ok).subscribe().dispose()
 			}
 			return testResults
@@ -421,7 +421,7 @@ class InfobloxProvider implements IPAMProvider, DNSProvider {
 		try {
 			def listResults = listZones(client, poolServer, opts)
 
-			log.info("listZoneResults: {}", listResults)
+			log.debug("listZoneResults: {}", listResults)
 			if (listResults.success && listResults.data != null) {
 				List apiItems = listResults.data as List<Map>
 				apiItems = apiItems.findAll{it.fqdn != '.' && it.fqdn}
@@ -519,7 +519,7 @@ class InfobloxProvider implements IPAMProvider, DNSProvider {
 
 	//cacheZoneDomainRecords
 	Completable cacheZoneDomainRecords(HttpApiClient client, NetworkPoolServer poolServer, NetworkDomainIdentityProjection domain, String recordType, Map opts) {
-		log.info "cacheZoneDomainRecords $poolServer, $domain, $recordType, $opts"
+		log.debug "cacheZoneDomainRecords $poolServer, $domain, $recordType, $opts"
 		def listResults = listZoneRecords(client, poolServer, domain.name, "record:${recordType.toLowerCase()}", opts)
 		log.debug("listResults: {}",listResults)
 		if(listResults.success) {
@@ -672,7 +672,7 @@ class InfobloxProvider implements IPAMProvider, DNSProvider {
 	void cacheNetworks(HttpApiClient client, NetworkPoolServer poolServer, Map opts) {
 		opts.doPaging = true
 		def listResults = listNetworks(client, poolServer, opts)
-		log.info("listResults: {}", listResults.dump())
+		log.debug("listResults: {}", listResults.dump())
 
 		if(listResults.success) {
 			List apiItems = listResults.data as List<Map>
@@ -762,7 +762,7 @@ class InfobloxProvider implements IPAMProvider, DNSProvider {
 					log.warn("no ip ranges found!")
 					def networkInfo = MorpheusUtils.getNetworkPoolConfig(networkIp)
 					networkInfo?.ranges?.each { range ->
-						log.info("range: ${range}")
+						log.debug("range: ${range}")
 						def rangeConfig = [networkPool:existingItem, startAddress:range.startAddress, endAddress:range.endAddress, addressCount:networkInfo.config.ipCount]
 						def addRange = new NetworkPoolRange(rangeConfig)
 						existingItem.addToIpRanges(addRange)
