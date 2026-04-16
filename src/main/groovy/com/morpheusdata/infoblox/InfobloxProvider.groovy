@@ -1149,7 +1149,6 @@ class InfobloxProvider implements IPAMProvider, DNSProvider {
 
 
 				if(rtn.success) {
-					rtn.content = results.content
 					rtn.data = results.data?.result
 					rtn.headers = results.headers
 				} else {
